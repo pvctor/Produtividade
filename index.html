@@ -23,12 +23,40 @@
   }
   body { background:var(--bg); color:var(--text); font-family:'Sora',sans-serif; font-size:var(--fs); transition:background .3s,color .3s; min-height:100vh; }
 
+  /* LOGIN */
+  #loginScreen {
+    position:fixed; inset:0; background:var(--bg); z-index:9999;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .login-box {
+    background:var(--card); border:1.5px solid var(--border); border-radius:18px;
+    padding:40px 36px; width:100%; max-width:380px;
+    box-shadow:0 8px 40px #00000060;
+  }
+  .login-logo { font-size:1.5em; font-weight:800; color:var(--accent); margin-bottom:6px; }
+  .login-sub { color:var(--muted); font-size:.85em; margin-bottom:28px; }
+  .login-label { font-size:.75em; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; display:block; }
+  .login-input {
+    width:100%; background:var(--input); border:1.5px solid var(--border);
+    border-radius:9px; color:var(--text); padding:10px 14px;
+    font-size:.95em; font-family:'Sora',sans-serif; outline:none;
+    transition:border .2s; margin-bottom:16px;
+  }
+  .login-input:focus { border-color:var(--accent); }
+  .login-btn {
+    width:100%; background:var(--accent); color:#fff; border:none;
+    border-radius:9px; padding:12px; font-size:1em; font-weight:700;
+    cursor:pointer; font-family:'Sora',sans-serif;
+    box-shadow:0 3px 16px #4ade8055; transition:all .2s; margin-top:4px;
+  }
+  .login-btn:hover { opacity:.88; transform:translateY(-1px); }
+  .login-error { color:#f87171; font-size:.82em; font-weight:600; margin-top:10px; min-height:20px; text-align:center; }
+
   header { background:var(--card); border-bottom:1px solid var(--border); padding:12px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:100; box-shadow:0 1px 12px #00000030; }
   .logo { font-weight:800; font-size:1.15em; letter-spacing:-.5px; color:var(--accent); }
   .controls { display:flex; gap:8px; align-items:center; }
   .btn { background:var(--card); color:var(--text); border:1.5px solid var(--border); border-radius:8px; padding:6px 14px; font-size:.85em; cursor:pointer; font-weight:600; font-family:'Sora',sans-serif; transition:all .2s; }
   .btn:hover { border-color:var(--accent); color:var(--accent); }
-  .btn.active { background:var(--accent); color:#fff; border-color:var(--accent); }
   .icon-btn { background:transparent; border:1.5px solid var(--border); border-radius:8px; color:var(--muted); cursor:pointer; padding:5px 10px; font-size:.9em; font-family:'Sora',sans-serif; transition:all .2s; }
   .icon-btn:hover { border-color:var(--accent); color:var(--accent); }
   .back-btn { background:transparent; border:1.5px solid var(--border); border-radius:8px; color:var(--text); cursor:pointer; padding:6px 16px; font-size:.9em; font-weight:600; font-family:'Sora',sans-serif; display:flex; align-items:center; gap:6px; transition:all .2s; }
@@ -39,7 +67,6 @@
   .page.active { display:block; }
 
   .section-title { font-size:.78em; font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:1.5px; margin:24px 0 12px; }
-
   .card { background:var(--card); border:1px solid var(--border); border-radius:14px; padding:20px; margin-bottom:16px; }
 
   .month-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:14px; margin-bottom:32px; }
@@ -93,7 +120,6 @@
   .month-sub { color:var(--muted); font-size:.85em; margin-top:2px; }
   .month-actions { display:flex; align-items:center; gap:12px; }
 
-  /* SYNC STATUS */
   #syncBar { position:fixed; bottom:18px; right:18px; background:var(--card); border:1.5px solid var(--border); border-radius:10px; padding:8px 16px; font-size:.8em; font-weight:700; display:flex; align-items:center; gap:8px; box-shadow:0 4px 20px #00000040; opacity:0; transition:opacity .4s; z-index:999; pointer-events:none; }
   #syncDot { width:8px; height:8px; border-radius:50%; background:var(--muted); flex-shrink:0; }
 
@@ -106,6 +132,20 @@
 </head>
 <body>
 
+<!-- LOGIN SCREEN -->
+<div id="loginScreen">
+  <div class="login-box">
+    <div class="login-logo">📋 Produtividade 2025</div>
+    <div class="login-sub">Controle de Produtividade Policial — NAI Altamira</div>
+    <label class="login-label">Usuário</label>
+    <input class="login-input" type="text" id="loginUser" placeholder="usuário" autocomplete="username"/>
+    <label class="login-label">Senha</label>
+    <input class="login-input" type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password"/>
+    <button class="login-btn" id="loginBtn">Entrar</button>
+    <div class="login-error" id="loginError"></div>
+  </div>
+</div>
+
 <header>
   <div class="logo">📋 Produtividade 2025</div>
   <div class="controls">
@@ -113,38 +153,32 @@
     <button class="icon-btn" id="btnFontDn" title="Diminuir fonte">A−</button>
     <button class="icon-btn" id="btnFontUp" title="Aumentar fonte">A+</button>
     <button class="icon-btn" id="btnClear" title="Limpar todos os dados" style="color:#f87171;border-color:#f8717140">🗑</button>
+    <button class="icon-btn" id="btnLogout" title="Sair" style="color:#f87171;border-color:#f8717140">⏻ Sair</button>
     <button class="btn" id="btnTheme">☀ Claro</button>
   </div>
 </header>
 
-<!-- SYNC BAR -->
 <div id="syncBar">
   <div id="syncDot"></div>
   <span id="syncMsg">Sincronizando...</span>
 </div>
 
-<!-- DASHBOARD PAGE -->
 <div class="page active" id="pageDashboard">
   <div class="content">
     <div style="font-size:1.5em;font-weight:800;margin-bottom:4px">Dashboard</div>
     <div style="color:var(--muted);font-size:.88em;margin-bottom:8px">Controle de Produtividade Policial — 2025</div>
-
     <div class="section-title" id="compareTitle">📊 Comparativo</div>
-
     <div class="card" style="margin-bottom:20px">
       <div style="font-size:.8em;font-weight:700;color:var(--muted);margin-bottom:16px" id="barChartLabel">Principais Métricas</div>
       <div class="bar-wrap"><canvas id="chartBar"></canvas></div>
     </div>
-
     <div class="section-title">📈 Evolução Anual por Métrica</div>
     <div class="charts-grid" id="chartsGrid"></div>
-
     <div class="section-title">📅 Meses do Ano</div>
     <div class="month-grid" id="monthGrid"></div>
   </div>
 </div>
 
-<!-- MONTH PAGE -->
 <div class="page" id="pageMonth">
   <div class="content">
     <div class="month-header">
@@ -165,7 +199,6 @@
   </div>
 </div>
 
-<!-- FIREBASE SDK -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
@@ -183,6 +216,45 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const DOC_REF = doc(db, "produtividade", "dados2025");
+
+// ── LOGIN ──────────────────────────────────────────────
+const VALID_USER = "pvctor";
+const VALID_PASS = "15235487";
+const SESSION_KEY = "prod2025_auth";
+
+function checkSession() {
+  return sessionStorage.getItem(SESSION_KEY) === "ok";
+}
+
+function doLogin() {
+  const user = document.getElementById('loginUser').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  if (user === VALID_USER && pass === VALID_PASS) {
+    sessionStorage.setItem(SESSION_KEY, "ok");
+    document.getElementById('loginScreen').style.display = 'none';
+    loadFromFirebase();
+  } else {
+    const err = document.getElementById('loginError');
+    err.textContent = '⚠ Usuário ou senha incorretos.';
+    document.getElementById('loginPass').value = '';
+    setTimeout(() => { err.textContent = ''; }, 3000);
+  }
+}
+
+document.getElementById('loginBtn').addEventListener('click', doLogin);
+document.getElementById('loginPass').addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+document.getElementById('loginUser').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('loginPass').focus(); });
+
+document.getElementById('btnLogout').addEventListener('click', () => {
+  if (confirm('Deseja sair?')) {
+    sessionStorage.removeItem(SESSION_KEY);
+    location.reload();
+  }
+});
+
+if (checkSession()) {
+  document.getElementById('loginScreen').style.display = 'none';
+}
 
 // ── ITEMS ──────────────────────────────────────────────
 const ITEMS = [
@@ -234,21 +306,18 @@ const ITEMS = [
 
 const MONTHS = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
 const MONTHS_SHORT = MONTHS.map(m => m.slice(0,3));
-
 const KEY_METRICS = [
   { label:"Prisões", ids:["pris_flag","pris_mand","pris_int1","pris_int2"], color:"#4ade80" },
   { label:"Mandados de Busca", ids:["mandado_bus","cump_mand"], color:"#60a5fa" },
   { label:"Rel. Técnicos (RT's)", ids:["rt"], color:"#f59e0b" },
   { label:"RELINT's", ids:["relint"], color:"#f472b6" },
 ];
-
 const CATS = [...new Set(ITEMS.map(i => i.cat))];
 const YEAR = 2025;
 
 let isDark = true;
 let currentFontSize = 14;
 let currentMonthView = 0;
-
 const NOW = new Date();
 const CUR_M = NOW.getMonth();
 const PREV_M = CUR_M === 0 ? 11 : CUR_M - 1;
@@ -262,7 +331,6 @@ MONTHS.forEach((_, i) => {
 let barChart = null;
 const lineCharts = {};
 
-// ── SYNC UI ────────────────────────────────────────────
 function showSync(msg, color, dot) {
   const bar = document.getElementById('syncBar');
   const dotEl = document.getElementById('syncDot');
@@ -287,7 +355,6 @@ function showSaveStatus(msg, color) {
   el._fadeTimer = setTimeout(() => { el.style.opacity = '0'; }, 2500);
 }
 
-// ── FIREBASE LOAD ──────────────────────────────────────
 async function loadFromFirebase() {
   showSync('Carregando dados...', '#60a5fa', '#60a5fa');
   try {
@@ -298,9 +365,7 @@ async function loadFromFirebase() {
         MONTHS.forEach((_, i) => {
           if (payload.data[i]) {
             ITEMS.forEach(it => {
-              if (payload.data[i][it.id]) {
-                data[i][it.id] = payload.data[i][it.id];
-              }
+              if (payload.data[i][it.id]) data[i][it.id] = payload.data[i][it.id];
             });
           }
         });
@@ -322,24 +387,20 @@ async function loadFromFirebase() {
     }
   } catch(e) {
     showSync('⚠ Erro ao carregar', '#f87171', '#f87171');
-    console.error(e);
   }
   refreshDashboard();
 }
 
-// ── FIREBASE SAVE ──────────────────────────────────────
 let saveTimer = null;
 async function saveToFirebase() {
   showSync('Salvando...', '#f59e0b', '#f59e0b');
   try {
-    const payload = { data, isDark, currentFontSize, updatedAt: new Date().toISOString() };
-    await setDoc(DOC_REF, payload);
+    await setDoc(DOC_REF, { data, isDark, currentFontSize, updatedAt: new Date().toISOString() });
     showSync('✓ Salvo na nuvem', '#4ade80', '#4ade80');
     showSaveStatus('✓ Salvo', '#4ade80');
   } catch(e) {
     showSync('⚠ Erro ao salvar', '#f87171', '#f87171');
     showSaveStatus('⚠ Erro ao salvar', '#f87171');
-    console.error(e);
   }
 }
 
@@ -351,55 +412,34 @@ function scheduleSave() {
 
 function clearAllData() {
   if (!confirm('Limpar todos os dados? Esta ação não pode ser desfeita.')) return;
-  MONTHS.forEach((_, i) => {
-    ITEMS.forEach(it => { data[i][it.id] = { qty: 0, obs: '' }; });
-  });
+  MONTHS.forEach((_, i) => { ITEMS.forEach(it => { data[i][it.id] = { qty: 0, obs: '' }; }); });
   saveToFirebase();
   showSaveStatus('🗑 Dados limpos', '#f87171');
   refreshDashboard();
 }
 
-// ── CHARTS ─────────────────────────────────────────────
-function getMetric(mIdx, ids) {
-  return ids.reduce((a, id) => a + (parseInt(data[mIdx][id].qty) || 0), 0);
-}
-function getTotal(mIdx) {
-  return ITEMS.reduce((a, it) => a + (parseInt(data[mIdx][it.id].qty) || 0), 0);
-}
-function getCSSVar(v) {
-  return getComputedStyle(document.body).getPropertyValue(v).trim();
-}
+function getMetric(mIdx, ids) { return ids.reduce((a, id) => a + (parseInt(data[mIdx][id].qty) || 0), 0); }
+function getTotal(mIdx) { return ITEMS.reduce((a, it) => a + (parseInt(data[mIdx][it.id].qty) || 0), 0); }
+function getCSSVar(v) { return getComputedStyle(document.body).getPropertyValue(v).trim(); }
 
 function buildBarChart() {
   const ctx = document.getElementById('chartBar').getContext('2d');
-  const borderColor = getCSSVar('--border');
-  const mutedColor = getCSSVar('--muted');
-  const accentColor = getCSSVar('--accent');
-  const cardColor = getCSSVar('--card');
-  const textColor = getCSSVar('--text');
-  const labels = KEY_METRICS.map(m => m.label);
-  const prevData = KEY_METRICS.map(m => getMetric(PREV_M, m.ids));
-  const currData = KEY_METRICS.map(m => getMetric(CUR_M, m.ids));
+  const borderColor = getCSSVar('--border'), mutedColor = getCSSVar('--muted');
+  const accentColor = getCSSVar('--accent'), cardColor = getCSSVar('--card'), textColor = getCSSVar('--text');
   if (barChart) barChart.destroy();
   barChart = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels,
+      labels: KEY_METRICS.map(m => m.label),
       datasets: [
-        { label: MONTHS[PREV_M], data: prevData, backgroundColor: mutedColor + '99', borderRadius: 6, borderSkipped: false },
-        { label: MONTHS[CUR_M], data: currData, backgroundColor: accentColor, borderRadius: 6, borderSkipped: false },
+        { label: MONTHS[PREV_M], data: KEY_METRICS.map(m => getMetric(PREV_M, m.ids)), backgroundColor: mutedColor + '99', borderRadius: 6, borderSkipped: false },
+        { label: MONTHS[CUR_M], data: KEY_METRICS.map(m => getMetric(CUR_M, m.ids)), backgroundColor: accentColor, borderRadius: 6, borderSkipped: false },
       ]
     },
     options: {
       responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { labels: { color: mutedColor, font: { family: 'Sora', size: 11 } } },
-        tooltip: { backgroundColor: cardColor, titleColor: textColor, bodyColor: mutedColor, borderColor, borderWidth: 1, cornerRadius: 10 }
-      },
-      scales: {
-        x: { grid: { display: false }, ticks: { color: mutedColor, font: { family: 'Sora', size: 11 } }, border: { display: false } },
-        y: { grid: { color: borderColor, drawBorder: false }, ticks: { color: mutedColor, font: { family: 'Sora', size: 11 } }, border: { display: false } }
-      }
+      plugins: { legend: { labels: { color: mutedColor, font: { family: 'Sora', size: 11 } } }, tooltip: { backgroundColor: cardColor, titleColor: textColor, bodyColor: mutedColor, borderColor, borderWidth: 1, cornerRadius: 10 } },
+      scales: { x: { grid: { display: false }, ticks: { color: mutedColor, font: { family: 'Sora', size: 11 } }, border: { display: false } }, y: { grid: { color: borderColor, drawBorder: false }, ticks: { color: mutedColor, font: { family: 'Sora', size: 11 } }, border: { display: false } } }
     }
   });
 }
@@ -408,62 +448,18 @@ function buildMiniCharts() {
   const grid = document.getElementById('chartsGrid');
   grid.innerHTML = '';
   KEY_METRICS.forEach((m, mi) => {
-    const currVal = getMetric(CUR_M, m.ids);
-    const prevVal = getMetric(PREV_M, m.ids);
-    const delta = currVal - prevVal;
-    const deltaHtml = delta > 0
-      ? `<span class="metric-delta delta-up">▲ +${delta}</span>`
-      : delta < 0
-      ? `<span class="metric-delta delta-dn">▼ ${delta}</span>`
-      : `<span class="metric-delta delta-eq">= igual</span>`;
+    const currVal = getMetric(CUR_M, m.ids), prevVal = getMetric(PREV_M, m.ids), delta = currVal - prevVal;
+    const deltaHtml = delta > 0 ? `<span class="metric-delta delta-up">▲ +${delta}</span>` : delta < 0 ? `<span class="metric-delta delta-dn">▼ ${delta}</span>` : `<span class="metric-delta delta-eq">= igual</span>`;
     const div = document.createElement('div');
     div.className = 'metric-card';
-    div.innerHTML = `
-      <div class="metric-label">${m.label}</div>
-      <div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px">
-        <span class="metric-val" style="color:${m.color}">${currVal}</span>
-        ${deltaHtml}
-      </div>
-      <div class="chart-wrap"><canvas id="lineChart${mi}"></canvas></div>
-    `;
+    div.innerHTML = `<div class="metric-label">${m.label}</div><div style="display:flex;align-items:baseline;gap:8px;margin-bottom:12px"><span class="metric-val" style="color:${m.color}">${currVal}</span>${deltaHtml}</div><div class="chart-wrap"><canvas id="lineChart${mi}"></canvas></div>`;
     grid.appendChild(div);
-    const yearData = MONTHS.map((_, i) => getMetric(i, m.ids));
-    const borderColor = getCSSVar('--border');
-    const mutedColor = getCSSVar('--muted');
-    const cardColor = getCSSVar('--card');
-    const textColor = getCSSVar('--text');
-    const pointRadii = MONTHS.map((_, i) => i === CUR_M ? 6 : 3);
-    const pointBg = MONTHS.map((_, i) => i === CUR_M ? m.color : m.color + '80');
+    const borderColor = getCSSVar('--border'), mutedColor = getCSSVar('--muted'), cardColor = getCSSVar('--card'), textColor = getCSSVar('--text');
     if (lineCharts[mi]) lineCharts[mi].destroy();
     lineCharts[mi] = new Chart(document.getElementById(`lineChart${mi}`).getContext('2d'), {
       type: 'line',
-      data: {
-        labels: MONTHS_SHORT,
-        datasets: [{
-          data: yearData,
-          borderColor: m.color,
-          borderWidth: 2.5,
-          pointBackgroundColor: pointBg,
-          pointRadius: pointRadii,
-          pointHoverRadius: 7,
-          tension: 0.35,
-          fill: true,
-          backgroundColor: m.color + '18',
-        }]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: { backgroundColor: cardColor, titleColor: textColor, bodyColor: m.color, borderColor, borderWidth: 1, cornerRadius: 8,
-            callbacks: { label: ctx => ` ${ctx.parsed.y}` }
-          }
-        },
-        scales: {
-          x: { grid: { display: false }, ticks: { color: mutedColor, font: { family: 'Sora', size: 9 } }, border: { display: false } },
-          y: { grid: { color: borderColor }, ticks: { color: mutedColor, font: { family: 'Sora', size: 9 } }, border: { display: false } }
-        }
-      }
+      data: { labels: MONTHS_SHORT, datasets: [{ data: MONTHS.map((_, i) => getMetric(i, m.ids)), borderColor: m.color, borderWidth: 2.5, pointBackgroundColor: MONTHS.map((_, i) => i === CUR_M ? m.color : m.color + '80'), pointRadius: MONTHS.map((_, i) => i === CUR_M ? 6 : 3), tension: 0.35, fill: true, backgroundColor: m.color + '18' }] },
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { backgroundColor: cardColor, titleColor: textColor, bodyColor: m.color, borderColor, borderWidth: 1, cornerRadius: 8, callbacks: { label: ctx => ` ${ctx.parsed.y}` } } }, scales: { x: { grid: { display: false }, ticks: { color: mutedColor, font: { family: 'Sora', size: 9 } }, border: { display: false } }, y: { grid: { color: borderColor }, ticks: { color: mutedColor, font: { family: 'Sora', size: 9 } }, border: { display: false } } } }
     });
   });
 }
@@ -472,261 +468,132 @@ function buildMonthGrid() {
   const grid = document.getElementById('monthGrid');
   grid.innerHTML = '';
   MONTHS.forEach((m, i) => {
-    const total = getTotal(i);
-    const isCur = i === CUR_M;
+    const total = getTotal(i), isCur = i === CUR_M;
     const card = document.createElement('div');
     card.className = 'month-card' + (isCur ? ' current' : '');
-    card.innerHTML = `
-      <div class="mab">${m.slice(0,3).toUpperCase()}</div>
-      <div class="mname">${m}</div>
-      <div class="mrow">
-        <span class="mlabel">Total</span>
-        <span class="mtotal" id="monthTotal_${i}">${total}</span>
-      </div>
-      ${isCur ? '<div class="mbadge">● Mês atual</div>' : ''}
-    `;
+    card.innerHTML = `<div class="mab">${m.slice(0,3).toUpperCase()}</div><div class="mname">${m}</div><div class="mrow"><span class="mlabel">Total</span><span class="mtotal" id="monthTotal_${i}">${total}</span></div>${isCur ? '<div class="mbadge">● Mês atual</div>' : ''}`;
     card.addEventListener('click', () => openMonth(i));
     grid.appendChild(card);
   });
 }
 
-function updateDashboardTitles() {
+function refreshDashboard() {
   document.getElementById('compareTitle').textContent = `📊 Comparativo: ${MONTHS[CUR_M]} vs ${MONTHS[PREV_M]}`;
   document.getElementById('barChartLabel').textContent = `Principais Métricas — ${MONTHS[PREV_M]} vs ${MONTHS[CUR_M]}`;
+  buildBarChart(); buildMiniCharts(); buildMonthGrid();
 }
 
-function refreshDashboard() {
-  updateDashboardTitles();
-  buildBarChart();
-  buildMiniCharts();
-  buildMonthGrid();
-}
-
-// ── MONTH VIEW ─────────────────────────────────────────
 function openMonth(mIdx) {
   currentMonthView = mIdx;
   document.getElementById('pageDashboard').classList.remove('active');
   document.getElementById('pageMonth').classList.add('active');
   document.getElementById('monthTitle').textContent = `${MONTHS[mIdx]} ${YEAR}`;
-
-  const header = `
-    <div style="display:flex;align-items:center;gap:14px;margin-bottom:24px">
-      <button class="back-btn" id="btnBack">← Dashboard</button>
-    </div>
-  `;
-
   let html = '';
   CATS.forEach(cat => {
     const catItems = ITEMS.filter(it => it.cat === cat);
-    html += `<div class="card">
-      <div class="cat-title">${cat}</div>
-      <table>
-        <thead><tr>
-          <th style="width:55%">Item</th>
-          <th style="width:80px;text-align:center">Qtd</th>
-          <th>Observação</th>
-        </tr></thead>
-        <tbody>`;
+    html += `<div class="card"><div class="cat-title">${cat}</div><table><thead><tr><th style="width:55%">Item</th><th style="width:80px;text-align:center">Qtd</th><th>Observação</th></tr></thead><tbody>`;
     catItems.forEach(it => {
-      const v = data[mIdx][it.id];
-      const hv = (v.qty > 0);
-      html += `<tr id="row_${mIdx}_${it.id}" class="${hv ? 'has-val' : ''}">
-        <td>
-          <span>${it.label}</span>
-          ${hv ? `<span class="val-badge" id="vbadge_${mIdx}_${it.id}">${v.qty}</span>` : `<span class="val-badge" id="vbadge_${mIdx}_${it.id}" style="display:none">${v.qty}</span>`}
-        </td>
-        <td style="text-align:center">
-          <input type="number" min="0" value="${v.qty || ''}" placeholder="0"
-            class="qty-input ${hv ? 'qty-hi' : ''}"
-            data-month="${mIdx}" data-id="${it.id}"
-            id="qty_${mIdx}_${it.id}"/>
-        </td>
-        <td>
-          <input type="text" value="${v.obs || ''}" placeholder="Observação opcional..."
-            data-month="${mIdx}" data-id="${it.id}"
-            id="obs_${mIdx}_${it.id}"/>
-        </td>
-      </tr>`;
+      const v = data[mIdx][it.id], hv = (v.qty > 0);
+      html += `<tr id="row_${mIdx}_${it.id}" class="${hv ? 'has-val' : ''}"><td><span>${it.label}</span><span class="val-badge" id="vbadge_${mIdx}_${it.id}" style="${hv ? '' : 'display:none'}">${v.qty}</span></td><td style="text-align:center"><input type="number" min="0" value="${v.qty || ''}" placeholder="0" class="qty-input ${hv ? 'qty-hi' : ''}" data-month="${mIdx}" data-id="${it.id}" id="qty_${mIdx}_${it.id}"/></td><td><input type="text" value="${v.obs || ''}" placeholder="Observação opcional..." data-month="${mIdx}" data-id="${it.id}" id="obs_${mIdx}_${it.id}"/></td></tr>`;
     });
     html += `</tbody></table></div>`;
   });
-
-  document.getElementById('monthContent').innerHTML = header + html;
+  document.getElementById('monthContent').innerHTML = `<div style="display:flex;align-items:center;gap:14px;margin-bottom:24px"><button class="back-btn" id="btnBack">← Dashboard</button></div>` + html;
   updateMonthTotal(mIdx);
-
   document.getElementById('btnBack').addEventListener('click', () => {
     document.getElementById('pageMonth').classList.remove('active');
     document.getElementById('pageDashboard').classList.add('active');
     refreshDashboard();
   });
-
   document.querySelectorAll('.qty-input').forEach(inp => {
     inp.addEventListener('input', e => {
-      const m = parseInt(e.target.dataset.month);
-      const id = e.target.dataset.id;
-      const val = parseInt(e.target.value) || 0;
+      const m = parseInt(e.target.dataset.month), id = e.target.dataset.id, val = parseInt(e.target.value) || 0;
       data[m][id].qty = val;
-      const hv = val > 0;
-      const row = document.getElementById(`row_${m}_${id}`);
-      const badge = document.getElementById(`vbadge_${m}_${id}`);
+      const hv = val > 0, row = document.getElementById(`row_${m}_${id}`), badge = document.getElementById(`vbadge_${m}_${id}`);
       if (hv) { row.classList.add('has-val'); inp.classList.add('qty-hi'); badge.style.display=''; badge.textContent=val; }
       else { row.classList.remove('has-val'); inp.classList.remove('qty-hi'); badge.style.display='none'; }
-      updateMonthTotal(m);
-      scheduleSave();
+      updateMonthTotal(m); scheduleSave();
     });
   });
-
   document.querySelectorAll('#monthContent input[type=text]').forEach(inp => {
-    inp.addEventListener('input', e => {
-      const m = parseInt(e.target.dataset.month);
-      const id = e.target.dataset.id;
-      data[m][id].obs = e.target.value;
-      scheduleSave();
-    });
+    inp.addEventListener('input', e => { data[parseInt(e.target.dataset.month)][e.target.dataset.id].obs = e.target.value; scheduleSave(); });
   });
-
   document.getElementById('btnExport').addEventListener('click', () => exportReport(mIdx));
   document.getElementById('btnExport2').addEventListener('click', () => exportReport(mIdx));
 }
 
 function updateMonthTotal(mIdx) {
   const t = getTotal(mIdx);
-  const b1 = document.getElementById('monthTotalBadge');
-  const b2 = document.getElementById('monthTotalBadge2');
+  const b1 = document.getElementById('monthTotalBadge'), b2 = document.getElementById('monthTotalBadge2');
   if (b1) b1.textContent = `Total: ${t}`;
   if (b2) b2.textContent = `Total do Mês: ${t}`;
 }
 
-// ── EXPORT PDF ─────────────────────────────────────────
 function exportReport(mIdx) {
   const { jsPDF } = window.jspdf;
-  const month = MONTHS[mIdx];
-  const total = getTotal(mIdx);
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('pt-BR');
-  const timeStr = now.toLocaleTimeString('pt-BR');
+  const month = MONTHS[mIdx], total = getTotal(mIdx), now = new Date();
   const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-  const PW = 210, PH = 297;
-  const ML = 14, MR = 14, MT = 14;
-  let y = MT;
+  const PW = 210, PH = 297, ML = 14, MR = 14;
+  let y = 14;
   const setFont = (style, size) => { doc.setFont('helvetica', style); doc.setFontSize(size); };
-  const hex2rgb = h => { const r = parseInt(h.slice(1,3),16), g = parseInt(h.slice(3,5),16), b = parseInt(h.slice(5,7),16); return [r,g,b]; };
+  const hex2rgb = h => [parseInt(h.slice(1,3),16), parseInt(h.slice(3,5),16), parseInt(h.slice(5,7),16)];
   const fillRect = (x, fy, w, fh, hex) => { doc.setFillColor(...hex2rgb(hex)); doc.rect(x, fy, w, fh, 'F'); };
-  const textC = (txt, fy, hex='#ffffff', size=10, style='normal') => {
-    setFont(style, size); doc.setTextColor(...hex2rgb(hex));
-    doc.text(txt, PW/2, fy, { align:'center' });
-  };
-  fillRect(0, 0, PW, 28, '#1a2e1a');
-  fillRect(0, 24, PW, 4, '#4ade80');
+  const textC = (txt, fy, hex='#ffffff', size=10, style='normal') => { setFont(style, size); doc.setTextColor(...hex2rgb(hex)); doc.text(txt, PW/2, fy, { align:'center' }); };
+  fillRect(0, 0, PW, 28, '#1a2e1a'); fillRect(0, 24, PW, 4, '#4ade80');
   textC('RELATÓRIO DE PRODUTIVIDADE POLICIAL', 10, '#4ade80', 13, 'bold');
   textC(`${month.toUpperCase()} / ${YEAR}`, 17, '#ffffff', 10, 'normal');
-  textC(`Emitido em ${dateStr} às ${timeStr}`, 22, '#a7f3d0', 8, 'normal');
+  textC(`Emitido em ${now.toLocaleDateString('pt-BR')} às ${now.toLocaleTimeString('pt-BR')}`, 22, '#a7f3d0', 8, 'normal');
   y = 34;
-  const metrics = KEY_METRICS.map(m => ({ label: m.label, val: getMetric(mIdx, m.ids), color: m.color }));
   const mW = (PW - ML - MR - 6) / 4;
-  metrics.forEach((m, i) => {
+  KEY_METRICS.forEach((m, i) => {
     const mx = ML + i * (mW + 2);
-    fillRect(mx, y, mW, 16, '#f0fff4');
-    doc.setDrawColor(74, 222, 128); doc.setLineWidth(0.4); doc.rect(mx, y, mW, 16, 'D');
-    setFont('bold', 14); doc.setTextColor(...hex2rgb(m.color));
-    doc.text(String(m.val), mx + mW/2, y + 8, { align:'center' });
-    setFont('normal', 6); doc.setTextColor(80, 90, 80);
-    const lines = doc.splitTextToSize(m.label, mW - 2);
-    doc.text(lines[0], mx + mW/2, y + 12, { align:'center' });
+    fillRect(mx, y, mW, 16, '#f0fff4'); doc.setDrawColor(74, 222, 128); doc.setLineWidth(0.4); doc.rect(mx, y, mW, 16, 'D');
+    setFont('bold', 14); doc.setTextColor(...hex2rgb(m.color)); doc.text(String(getMetric(mIdx, m.ids)), mx + mW/2, y + 8, { align:'center' });
+    setFont('normal', 6); doc.setTextColor(80, 90, 80); doc.text(doc.splitTextToSize(m.label, mW - 2)[0], mx + mW/2, y + 12, { align:'center' });
   });
   y += 22;
-  const ROW_H = 6.5;
-  const COL = { cat: ML, item: ML+36, qty: ML+36+78, obs: ML+36+78+14 };
-  const WIDTHS = { cat: 35, item: 77, qty: 13, obs: PW-MR-COL.obs };
-  const drawTableHeader = () => {
-    fillRect(ML, y, PW-ML-MR, 7, '#1a472a');
-    setFont('bold', 7.5); doc.setTextColor(255,255,255);
-    doc.text('CATEGORIA', COL.cat+1, y+5);
-    doc.text('ITEM', COL.item+1, y+5);
-    doc.text('QTD', COL.qty+1, y+5, { align:'center' });
-    doc.text('OBSERVAÇÃO', COL.obs+1, y+5);
-    y += 7;
-  };
-  const checkPage = (needed) => {
-    if (y + needed > PH - 18) { doc.addPage(); y = 14; drawTableHeader(); }
-  };
+  const ROW_H = 6.5, COL = { cat: ML, item: ML+36, qty: ML+36+78, obs: ML+36+78+14 }, WIDTHS = { cat: 35, item: 77, qty: 13, obs: PW-MR-COL.obs };
+  const drawTH = () => { fillRect(ML, y, PW-ML-MR, 7, '#1a472a'); setFont('bold', 7.5); doc.setTextColor(255,255,255); doc.text('CATEGORIA', COL.cat+1, y+5); doc.text('ITEM', COL.item+1, y+5); doc.text('QTD', COL.qty+1, y+5, { align:'center' }); doc.text('OBSERVAÇÃO', COL.obs+1, y+5); y += 7; };
+  const chkPg = (n) => { if (y + n > PH - 18) { doc.addPage(); y = 14; drawTH(); } };
   CATS.forEach(cat => {
     const catItems = ITEMS.filter(it => it.cat === cat);
-    checkPage(8);
-    fillRect(ML, y, PW-ML-MR, 6, '#e8f5e9');
-    setFont('bold', 8); doc.setTextColor(22,101,52);
-    doc.text(cat.toUpperCase(), COL.cat+1, y+4.2);
-    y += 6;
-    drawTableHeader();
+    chkPg(8); fillRect(ML, y, PW-ML-MR, 6, '#e8f5e9'); setFont('bold', 8); doc.setTextColor(22,101,52); doc.text(cat.toUpperCase(), COL.cat+1, y+4.2); y += 6; drawTH();
     catItems.forEach((it, idx) => {
-      const v = data[mIdx][it.id];
-      const hasVal = (parseInt(v.qty) || 0) > 0;
-      const itemLines = doc.splitTextToSize(it.label, WIDTHS.item - 2);
-      const obsLines  = doc.splitTextToSize(v.obs || '', WIDTHS.obs - 2);
-      const maxLines  = Math.max(itemLines.length, obsLines.length, 1);
-      const rh = Math.max(ROW_H, maxLines * 4.2 + 2);
-      checkPage(rh);
-      if (hasVal) fillRect(ML, y, PW-ML-MR, rh, '#f0fff4');
-      else if (idx % 2 === 0) fillRect(ML, y, PW-ML-MR, rh, '#fafafa');
-      else fillRect(ML, y, PW-ML-MR, rh, '#ffffff');
+      const v = data[mIdx][it.id], hasVal = (parseInt(v.qty) || 0) > 0;
+      const iL = doc.splitTextToSize(it.label, WIDTHS.item-2), oL = doc.splitTextToSize(v.obs || '', WIDTHS.obs-2);
+      const rh = Math.max(ROW_H, Math.max(iL.length, oL.length, 1) * 4.2 + 2);
+      chkPg(rh);
+      if (hasVal) fillRect(ML, y, PW-ML-MR, rh, '#f0fff4'); else if (idx%2===0) fillRect(ML, y, PW-ML-MR, rh, '#fafafa'); else fillRect(ML, y, PW-ML-MR, rh, '#ffffff');
       doc.setDrawColor(220,230,220); doc.setLineWidth(0.2); doc.rect(ML, y, PW-ML-MR, rh, 'D');
-      const ty = y + 4;
-      setFont('normal', 7.5); doc.setTextColor(40,40,40);
-      const catShort = doc.splitTextToSize(cat.split('–').pop().trim(), WIDTHS.cat-2);
-      doc.text(catShort, COL.cat+1, ty, { lineHeightFactor: 1.35 });
-      doc.text(itemLines, COL.item+1, ty, { lineHeightFactor: 1.35 });
-      if (hasVal) {
-        fillRect(COL.qty, y+1, WIDTHS.qty, rh-2, '#4ade80');
-        setFont('bold', 8.5); doc.setTextColor(20,80,20);
-      } else {
-        setFont('normal', 7.5); doc.setTextColor(160,160,160);
-      }
-      doc.text(String(parseInt(v.qty)||0), COL.qty + WIDTHS.qty/2, ty, { align:'center' });
-      setFont('normal', 7); doc.setTextColor(80,80,80);
-      if (obsLines.length > 0) doc.text(obsLines, COL.obs+1, ty, { lineHeightFactor: 1.35 });
+      const ty = y+4; setFont('normal', 7.5); doc.setTextColor(40,40,40);
+      doc.text(doc.splitTextToSize(cat.split('–').pop().trim(), WIDTHS.cat-2), COL.cat+1, ty, { lineHeightFactor:1.35 });
+      doc.text(iL, COL.item+1, ty, { lineHeightFactor:1.35 });
+      if (hasVal) { fillRect(COL.qty, y+1, WIDTHS.qty, rh-2, '#4ade80'); setFont('bold', 8.5); doc.setTextColor(20,80,20); } else { setFont('normal', 7.5); doc.setTextColor(160,160,160); }
+      doc.text(String(parseInt(v.qty)||0), COL.qty+WIDTHS.qty/2, ty, { align:'center' });
+      setFont('normal', 7); doc.setTextColor(80,80,80); if (oL.length > 0) doc.text(oL, COL.obs+1, ty, { lineHeightFactor:1.35 });
       y += rh;
     });
     y += 2;
   });
-  checkPage(14);
-  y += 2;
-  fillRect(ML, y, PW-ML-MR, 10, '#1a472a');
-  setFont('bold', 11); doc.setTextColor(...hex2rgb('#4ade80'));
-  doc.text(`TOTAL GERAL: ${total}`, PW - MR - 2, y + 7, { align:'right' });
-  setFont('normal', 8); doc.setTextColor(200,240,200);
-  doc.text(`Relatório gerado automaticamente — Sistema de Produtividade ${YEAR}`, ML+1, y+7);
-  const totalPages = doc.getNumberOfPages();
-  for (let p = 1; p <= totalPages; p++) {
-    doc.setPage(p);
-    setFont('normal', 7); doc.setTextColor(150,150,150);
-    doc.text(`Página ${p} de ${totalPages}`, PW/2, PH-6, { align:'center' });
-  }
+  chkPg(14); y += 2; fillRect(ML, y, PW-ML-MR, 10, '#1a472a');
+  setFont('bold', 11); doc.setTextColor(...hex2rgb('#4ade80')); doc.text(`TOTAL GERAL: ${total}`, PW-MR-2, y+7, { align:'right' });
+  setFont('normal', 8); doc.setTextColor(200,240,200); doc.text(`Relatório gerado automaticamente — Sistema de Produtividade ${YEAR}`, ML+1, y+7);
+  const tp = doc.getNumberOfPages();
+  for (let p = 1; p <= tp; p++) { doc.setPage(p); setFont('normal', 7); doc.setTextColor(150,150,150); doc.text(`Página ${p} de ${tp}`, PW/2, PH-6, { align:'center' }); }
   doc.save(`produtividade_${month}_${YEAR}.pdf`);
 }
 
-// ── THEME & FONT ───────────────────────────────────────
 document.getElementById('btnTheme').addEventListener('click', () => {
-  isDark = !isDark;
-  document.body.classList.toggle('light', !isDark);
+  isDark = !isDark; document.body.classList.toggle('light', !isDark);
   document.getElementById('btnTheme').textContent = isDark ? '☀ Claro' : '🌙 Escuro';
-  scheduleSave();
-  setTimeout(() => refreshDashboard(), 50);
+  scheduleSave(); setTimeout(() => refreshDashboard(), 50);
 });
-document.getElementById('btnFontUp').addEventListener('click', () => {
-  currentFontSize = Math.min(20, currentFontSize + 1);
-  document.documentElement.style.setProperty('--fs', currentFontSize + 'px');
-  scheduleSave();
-});
-document.getElementById('btnFontDn').addEventListener('click', () => {
-  currentFontSize = Math.max(11, currentFontSize - 1);
-  document.documentElement.style.setProperty('--fs', currentFontSize + 'px');
-  scheduleSave();
-});
+document.getElementById('btnFontUp').addEventListener('click', () => { currentFontSize = Math.min(20, currentFontSize+1); document.documentElement.style.setProperty('--fs', currentFontSize+'px'); scheduleSave(); });
+document.getElementById('btnFontDn').addEventListener('click', () => { currentFontSize = Math.max(11, currentFontSize-1); document.documentElement.style.setProperty('--fs', currentFontSize+'px'); scheduleSave(); });
 document.getElementById('btnClear').addEventListener('click', clearAllData);
 window.addEventListener('pagehide', saveToFirebase);
 
-// ── INIT ───────────────────────────────────────────────
-loadFromFirebase();
+if (checkSession()) loadFromFirebase();
 </script>
 </body>
 </html>
