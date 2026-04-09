@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Produtividade 2025</title>
+<title>Produtividade 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -202,7 +202,7 @@
 <body>
 
 <header id="appHeader">
-  <div class="logo">📋 Produtividade 2025</div>
+  <div class="logo">📋 Produtividade 2026</div>
   <div class="controls">
     <span id="saveStatus" style="font-size:.78em;font-weight:600;opacity:0;transition:opacity .4s;min-width:110px;text-align:right"></span>
     <button class="icon-btn" id="btnFontDn" title="Diminuir fonte">A−</button>
@@ -224,7 +224,7 @@
         <rect x="18" y="34" width="16" height="3" rx="1.5" fill="#4ade80" opacity=".5"/>
         <circle cx="26" cy="26" r="3" fill="#4ade80"/>
       </svg>
-      <h1>Produtividade 2025</h1>
+      <h1>Produtividade 2026</h1>
       <p>Sistema de Controle Policial</p>
     </div>
     <div class="login-field">
@@ -286,7 +286,7 @@
 <div class="page active" id="pageDashboard">
   <div class="content">
     <div style="font-size:1.5em;font-weight:800;margin-bottom:4px">Dashboard</div>
-    <div style="color:var(--muted);font-size:.88em;margin-bottom:8px">Controle de Produtividade Policial — 2025</div>
+    <div style="color:var(--muted);font-size:.88em;margin-bottom:8px">Controle de Produtividade Policial — 2026</div>
 
     <div class="section-title" id="compareTitle">📊 Comparativo</div>
 
@@ -452,7 +452,7 @@ const KEY_METRICS = [
 ];
 
 const CATS = [...new Set(ITEMS.map(i => i.cat))];
-const YEAR = 2025;
+const YEAR = 2026;
 
 // ── STATE ──────────────────────────────────────────────
 let isDark = true;
@@ -879,7 +879,7 @@ function exportReport(mIdx) {
 }
 
 // ── PERSIST (localStorage) ─────────────────────────────
-const LS_KEY = 'produtividade2025_v1';
+const LS_KEY = 'produtividade2026_v1';
 let saveTimer = null;
 
 function saveData() {
